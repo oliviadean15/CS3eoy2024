@@ -44,23 +44,23 @@ public class Visualizer extends Application {
 
         Button sortFN = new Button("FIRST NAME");
         sortFN.setMinHeight(50);
-        sortFN.setMinWidth(237);
+        sortFN.setMinWidth(297);
         sortFN.setStyle("-fx-font-size:20");
         Button sortLN = new Button("LAST NAME");
         sortLN.setMinHeight(50);
-        sortLN.setMinWidth(237);
+        sortLN.setMinWidth(297);
         sortLN.setStyle("-fx-font-size:20");
-        Button sortID = new Button("ID NUMBER");
-        sortID.setMinHeight(50);
-        sortID.setMinWidth(237);
-        sortID.setStyle("-fx-font-size:20");
+        //Button sortID = new Button("ID NUMBER");
+        //sortID.setMinHeight(50);
+        //sortID.setMinWidth(237);
+        //sortID.setStyle("-fx-font-size:20");
         Button sortPGL = new Button("↑ POINTS");
         sortPGL.setMinHeight(50);
-        sortPGL.setMinWidth(237);
+        sortPGL.setMinWidth(297);
         sortPGL.setStyle("-fx-font-size:20");
         Button sortPLG = new Button("↓ POINTS");
         sortPLG.setMinHeight(50);
-        sortPLG.setMinWidth(237);
+        sortPLG.setMinWidth(297);
         sortPLG.setStyle("-fx-font-size:20");
 
         textGrid = new GridPane();
@@ -86,7 +86,7 @@ public class Visualizer extends Application {
 
         HBox titleFrame = new HBox(title);
         titleFrame.setAlignment(Pos.CENTER);
-        HBox buttons = new HBox(sortFN,sortLN,sortID,sortPGL,sortPLG);
+        HBox buttons = new HBox(sortFN,sortLN,sortPGL,sortPLG);
         HBox contact = new HBox(contact1,contact2,contact3);
         contact.setAlignment(Pos.CENTER);
         contact.setSpacing(100);
@@ -115,7 +115,7 @@ public class Visualizer extends Application {
 
         sortFN.setOnAction(value -> { sortByFirst(students); textGrid = gridInputter(students);});
         sortLN.setOnAction(value -> { sortByLast(students); textGrid = gridInputter(students);});
-        sortID.setOnAction(value -> { sortByID(students); textGrid = gridInputter(students);});
+        //sortID.setOnAction(value -> { sortByID(students); textGrid = gridInputter(students);});
         sortPGL.setOnAction(value -> { sortByPointsGL(students); textGrid = gridInputter(students);});
         sortPLG.setOnAction(value -> { sortByPointsLG(students); textGrid = gridInputter(students);});
     }
@@ -146,10 +146,12 @@ public class Visualizer extends Application {
         SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparing(Student::getFirst));
         return students;
     }
+    /*
     public static List<Student> sortByID(List<Student> students) {
         SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparingInt(Student::getUserID));
         return students;
     }
+     */
     public static List<Student> sortByPointsLG(List<Student> students) {
         SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparingInt(Student::getPoints));
         return students;
