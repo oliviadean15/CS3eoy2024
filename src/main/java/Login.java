@@ -8,8 +8,11 @@ import javafx.geometry.Insets;
 import javafx.stage.Stage;
 
 public class Login extends Application {
-    private static final String CORRECT_USERNAME = "admin";
-    private static final String CORRECT_PASSWORD = "pass123";
+    private static final String CORRECT_USERNAME_ADMIN = "admin";
+    private static final String CORRECT_PASSWORD_ADMIN = "pass123";
+    private static final String CORRECT_USERNAME_STUDENT = "student";
+    private static final String CORRECT_PASSWORD_STUDENT = "pass1234";
+    private static boolean isAdmin = false;
     @Override
     public void start(Stage primaryStage) {
         Label titleLabel = new Label("NHS DATA ORGANIZATION\n     AND VISUALIZATION");
@@ -42,7 +45,19 @@ public class Login extends Application {
         loginButton.setOnAction(event -> {
             String enteredUsername = usernameField.getText();
             String enteredPassword = passwordField.getText();
-            if(enteredUsername.equals(CORRECT_USERNAME) && enteredPassword.equals(CORRECT_PASSWORD)) {
+            if(enteredUsername.equals(CORRECT_USERNAME_ADMIN) && enteredPassword.equals(CORRECT_PASSWORD_ADMIN)) {
+                isAdmin = true;
+                primaryStage.close();
+                Stage s = new Stage();
+                try {
+                    new Visualizer().start(s);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            else if(enteredUsername.equals(CORRECT_USERNAME_STUDENT) && enteredPassword.equals(CORRECT_PASSWORD_STUDENT)) {
+                isAdmin = false;
                 primaryStage.close();
                 Stage s = new Stage();
                 try {
@@ -85,6 +100,7 @@ public class Login extends Application {
         primaryStage.setTitle("olivia app woo");
         primaryStage.show();
     }
+    public static boolean isUserAdmin(){return isAdmin;}
     public static void main(String[] args){
         launch(args);
     }

@@ -32,6 +32,9 @@ public class Visualizer extends Application {
             students.add(new Student("" + row.get(0), "" + row.get(1), Integer.parseInt(""+row.get(2)), "", Integer.parseInt(""+row.get(3))));
         }
 
+        boolean isAdmin = Login.isUserAdmin();
+        System.out.println("isADMIN variable is " + isAdmin);
+
         Label title = new Label("NHS DATA ORGANIZATION AND VISUALIZATION");
         title.setFont(new Font("Times New Roman",40));
         title.setAlignment(Pos.CENTER);
@@ -50,10 +53,6 @@ public class Visualizer extends Application {
         sortLN.setMinHeight(50);
         sortLN.setMinWidth(297);
         sortLN.setStyle("-fx-font-size:20");
-        //Button sortID = new Button("ID NUMBER");
-        //sortID.setMinHeight(50);
-        //sortID.setMinWidth(237);
-        //sortID.setStyle("-fx-font-size:20");
         Button sortPGL = new Button("↑ POINTS");
         sortPGL.setMinHeight(50);
         sortPGL.setMinWidth(297);
@@ -65,17 +64,7 @@ public class Visualizer extends Application {
 
         textGrid = new GridPane();
 
-        ColumnConstraints col = new ColumnConstraints(237);
-        col.setHalignment(HPos.CENTER);
-
-        textGrid.getRowConstraints().add(new RowConstraints(40));
-        textGrid.getColumnConstraints().add(col);
-        textGrid.getColumnConstraints().add(col);
-        textGrid.getColumnConstraints().add(col);
-        textGrid.getColumnConstraints().add(col);
-        textGrid.getColumnConstraints().add(col);
-
-        textGrid = gridInputter(students);
+        textGrid  = isAdmin?gridInputterAdmin(students):gridInputterStudent(students);
 
         Label contact1 = new Label("Contact Information for Olivia Dean: ");
         contact1.setFont(new Font("Times New Roman",20));
@@ -113,13 +102,31 @@ public class Visualizer extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        sortFN.setOnAction(value -> { sortByFirst(students); textGrid = gridInputter(students);});
-        sortLN.setOnAction(value -> { sortByLast(students); textGrid = gridInputter(students);});
-        //sortID.setOnAction(value -> { sortByID(students); textGrid = gridInputter(students);});
-        sortPGL.setOnAction(value -> { sortByPointsGL(students); textGrid = gridInputter(students);});
-        sortPLG.setOnAction(value -> { sortByPointsLG(students); textGrid = gridInputter(students);});
+        if (isAdmin) {
+            sortFN.setOnAction(value -> { sortByFirst(students); textGrid = gridInputterAdmin(students);});
+            sortLN.setOnAction(value -> { sortByLast(students); textGrid = gridInputterAdmin(students);});
+            sortPGL.setOnAction(value -> { sortByPointsGL(students); textGrid = gridInputterAdmin(students);});
+            sortPLG.setOnAction(value -> { sortByPointsLG(students); textGrid = gridInputterAdmin(students);});
+        }
+        else{
+            sortFN.setOnAction(value -> { sortByFirst(students); textGrid = gridInputterStudent(students);});
+            sortLN.setOnAction(value -> { sortByLast(students); textGrid = gridInputterStudent(students);});
+            sortPGL.setOnAction(value -> { sortByPointsGL(students); textGrid = gridInputterStudent(students);});
+            sortPLG.setOnAction(value -> { sortByPointsLG(students); textGrid = gridInputterStudent(students);});
+        }
+
     }
-    public GridPane gridInputter(List<Student> students){
+    public GridPane gridInputterAdmin(List<Student> students){
+        ColumnConstraints col = new ColumnConstraints(237);
+        col.setHalignment(HPos.CENTER);
+
+        textGrid.getRowConstraints().add(new RowConstraints(40));
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+
         textGrid.getChildren().clear();
 
         textGrid.add(new Label("FIRST NAME"),0,0);
@@ -138,6 +145,32 @@ public class Visualizer extends Application {
         textGrid.setGridLinesVisible(true);
         return textGrid;
     }
+    public GridPane gridInputterStudent(List<Student> students){
+        ColumnConstraints col = new ColumnConstraints(297);
+        col.setHalignment(HPos.CENTER);
+
+        textGrid.getRowConstraints().add(new RowConstraints(40));
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+        textGrid.getColumnConstraints().add(col);
+
+        textGrid.getChildren().clear();
+
+        textGrid.add(new Label("FIRST NAME"),0,0);
+        textGrid.add(new Label("LAST NAME"),1,0);
+        textGrid.add(new Label("HOURS"),2,0);
+        textGrid.add(new Label("POINTS"),3,0);
+        for(int i = 0, j = 1; i < students.size(); i++, j++){
+            textGrid.getRowConstraints().add(new RowConstraints(40));
+            textGrid.add(new Label(students.get(i).getFirst()),0,j);
+            textGrid.add(new Label(students.get(i).getLast()),1,j);
+            textGrid.add(new Label(""+students.get(i).getHours()),2,j);
+            textGrid.add(new Label(""+students.get(i).getPoints()),3,j);
+        }
+        textGrid.setGridLinesVisible(true);
+        return textGrid;
+    }
     public static List<Student> sortByLast(List<Student> students) {
         SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparing(Student::getLast));
         return students;
@@ -146,12 +179,6 @@ public class Visualizer extends Application {
         SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparing(Student::getFirst));
         return students;
     }
-    /*
-    public static List<Student> sortByID(List<Student> students) {
-        SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparingInt(Student::getUserID));
-        return students;
-    }
-     */
     public static List<Student> sortByPointsLG(List<Student> students) {
         SortingUtil.quickSort(students, 0, students.size() - 1, Comparator.comparingInt(Student::getPoints));
         return students;
